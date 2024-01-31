@@ -5,21 +5,31 @@
     </head>
     <body>
         <center>
-        <h1>Hello from node & express server!</h1>
+        <h1>Herkkuja</h1>
         <div id="sisältö"></div>
         </center>
 
         <script>
+            async function fetchData() {
             document.getElementById("sisältö").innerHTML = "<h4>Ladataan herkkuja...</h4>"
-            fetch("http://localhost:3000/api/herkut")
-            .then(res => res.json())
-            .then(js => console.log(js))
+            var x = `<table><thead><th>Herkun nimi</th><th>tuotekoodi</th></thead><tbody>`//Taulukon aloitus
+            try {
+            const response = await fetch("http://localhost:3000/api/herkut") //Pyyntö. Sijoitetaan response muuttujaan
+            const herkkudata = await response.json() //Muutetaan json javascript muotoon. herkkudata on taulukollinen oliota.
+            
+            await herkkudata.map(h => { //Loopataan läpi oliot map funktiolla, h on 1 herkkuolio
+            x += `<tr><td>${h.name}</td><td>${h.id}<td></tr>` //lisätään aloitettuun taulukkoon joka kierroksella taulukkorivi
+            })
+            
+            //Taulukko päätetään ja renderöidään html elementtiin
+            x += `</tbody></table>`
+            document.getElementById("sisältö").innerHTML = x
+            }
+            catch (error) {
+                console.error("Error fetching data:", error)
+            }
+            }
+            fetchData()
         </script>
-        <!-- fetch ottaa get-tyyppisessä pyynnössä yhden parametrin.Eli mistä haetaan.HTTP-pyyntö joka hakee tietoja kyseisestä osoitteesta.-->
-        <!--.then(res => res.json()) res-aliasnimeen on sijoitettu tieto joka http-pyynnöllä saatiin-->
-        <!--.then(js => console.log(js))//Tulostaa vastauksen selaimen konsoliin. js on tässä javascript-muodossa.-->
-
-        <!--res.json() lukee vastauksen rungon, joka on yleensä JSON-muotoinen merkkijono.-->
-        <!--Se sitten muuntaa tämän JSON-muotoisen merkkijonon JavaScript-objektiksi käyttämällä JSON.parse() -metodia.-->
     </body>
 </html>
