@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Herkut</title>
+    </head>
+    <body>
+        <center>
+        <h1>Hello from node & express server!</h1>
+        <div id="sisältö"></div>
+        </center>
+
+        <script>
+            document.getElementById("sisältö").innerHTML = "<h4>Ladataan herkkuja...</h4>"
+            fetch("http://localhost:3000/api/herkut")
+            .then(res => res.json())
+            .then(js => console.log(js))
+        </script>
+        <!-- fetch ottaa get-tyyppisessä pyynnössä yhden parametrin.Eli mistä haetaan.HTTP-pyyntö joka hakee tietoja kyseisestä osoitteesta.-->
+        <!--.then(res => res.json()) res-aliasnimeen on sijoitettu tieto joka http-pyynnöllä saatiin-->
+        <!--.then(js => console.log(js))//Tulostaa vastauksen selaimen konsoliin. js on tässä javascript-muodossa.-->
+
+        <!--res.json() lukee vastauksen rungon, joka on yleensä JSON-muotoinen merkkijono.-->
+        <!--Se sitten muuntaa tämän JSON-muotoisen merkkijonon JavaScript-objektiksi käyttämällä JSON.parse() -metodia.-->
+    </body>
+</html>
