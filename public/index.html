@@ -11,10 +11,23 @@
             <button onclick="checkPin()">login</button> <!--Kutsutaan checkPin funktiota-->
         </div>
         <h1 class="hidden">Herkkuja</h1>
+        <h2 id="welcome">Tervetuloa selailemaan herkkuja!</h2>
+        <button class="hidden" onclick="logOut()">Logout</button>
         <div class="hidden" id="sisältö"></div>
         </center>
 
         <script>
+            const savedPin = localStorage.getItem("pinkoodi")
+            if (savedPin != null && savedPin != undefined) {
+                showElements()
+            } 
+
+            //Logout
+            function logOut() {
+                localStorage.clear()
+                window.location.reload()
+            }
+
             //pin koodin tarkistus
             async function checkPin() {
             var pin = document.getElementById("pin").value //pin muuttujaan tallentuu käyttäjän input kenttään käyttäjän syöte
@@ -22,16 +35,23 @@
             const correctPin = await response.json() //Puretaan json-data javascriptillä ja selaimella luettavaan muotoon ja tallennetaan correctPin muuttujaan
             
             if (pin == correctPin) {
-            var hiddenElements = document.getElementsByClassName("hidden")
-            
-            for (i = 0; i < hiddenElements.length; i++) {
-            hiddenElements[i].style.visibility = "visible"
-
-            document.getElementById("pin-div").style.visibility ="hidden"
-            }  
+            localStorage.setItem("pinkoodi", pin) //Kirjoittaminen localstorageen
+            showElements()
+            document.getElementById("welcome").style.visibility = "visible" //Tervehdysteksti esille
+            setTimeout(() => {
+            document.getElementById("welcome").style.visibility = "hidden" //Tervehdysteksti piiloon 4 sekunnin kuluttua
+            }, 4000)
             }
             else {
                 alert("Väärä pinkoodi")
+            }
+        }
+            //Show elements
+        function showElements() {
+            var hiddenElements = document.getElementsByClassName("hidden")
+            for (i = 0; i < hiddenElements.length; i++) {
+            hiddenElements[i].style.visibility = "visible"
+            document.getElementById("pin-div").style.visibility ="hidden"
             }
         }
 
