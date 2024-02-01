@@ -2,14 +2,40 @@
 <html>
     <head>
         <title>Herkut</title>
+        <link rel="stylesheet" href="style.css"/>
     </head>
     <body>
         <center>
-        <h1>Herkkuja</h1>
-        <div id="sisältö"></div>
+        <div id="pin-div">
+            <input id="pin" placeholder="pin code" type="password"/> 
+            <button onclick="checkPin()">login</button> <!--Kutsutaan checkPin funktiota-->
+        </div>
+        <h1 class="hidden">Herkkuja</h1>
+        <div class="hidden" id="sisältö"></div>
         </center>
 
         <script>
+            //pin koodin tarkistus
+            async function checkPin() {
+            var pin = document.getElementById("pin").value //pin muuttujaan tallentuu käyttäjän input kenttään käyttäjän syöte
+            const response = await fetch("http://localhost:3000/api/getpin") //haetaan backendistä oikea pin-koodi
+            const correctPin = await response.json() //Puretaan json-data javascriptillä ja selaimella luettavaan muotoon ja tallennetaan correctPin muuttujaan
+            
+            if (pin == correctPin) {
+            var hiddenElements = document.getElementsByClassName("hidden")
+            
+            for (i = 0; i < hiddenElements.length; i++) {
+            hiddenElements[i].style.visibility = "visible"
+
+            document.getElementById("pin-div").style.visibility ="hidden"
+            }  
+            }
+            else {
+                alert("Väärä pinkoodi")
+            }
+        }
+
+            //Datan haku        
             async function fetchData() {
             document.getElementById("sisältö").innerHTML = "<h4>Ladataan herkkuja...</h4>"
             var x = `<table><thead><th>Herkun nimi</th><th>tuotekoodi</th></thead><tbody>`//Taulukon aloitus
